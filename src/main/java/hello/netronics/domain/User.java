@@ -23,6 +23,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.GUEST;  // 기본값으로 GUEST 설정
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
