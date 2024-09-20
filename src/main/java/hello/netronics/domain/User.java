@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Profile;
 
 
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class User {
     @Column(nullable = false)
     private Role role = Role.GUEST;  // 기본값으로 GUEST 설정
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Profile profile;
+    @Column(nullable = true)
+    private String picture;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();

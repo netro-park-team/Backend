@@ -1,7 +1,6 @@
 package hello.netronics.configuration;
 
 
-import hello.netronics.auth.CurrentUserService;
 import hello.netronics.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

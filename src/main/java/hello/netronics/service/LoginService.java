@@ -4,6 +4,7 @@ import hello.netronics.auth.SessionUser;
 import hello.netronics.domain.Role;
 import hello.netronics.domain.User;
 import hello.netronics.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,11 +29,11 @@ import java.util.Optional;
 public class LoginService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
+    private final HttpSession httpSession;
 
-    @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         // DefaultOAuth2UserService를 사용하여 사용자 정보 로드
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService();
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         // 사용자 정보 추출
@@ -63,11 +64,15 @@ public class LoginService implements OAuth2UserService<OAuth2UserRequest, OAuth2
             log.info("New user created: {}", email);
         }
 
-        // SessionUser 객체 반환
-        return new SessionUser(
-                user.getId(),
+        // 세션서장
+        httpSession.setAttribute("user", new SessionUser(user));
+
+        // DefaultOAuth2User 반환
+        return new DefaultOAuth2User(
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name())),
                 oAuth2User.getAttributes(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+                "name" // "name" 속성을 username으로 사용
         );
     }
+
 }
