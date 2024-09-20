@@ -12,11 +12,13 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name="Users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    @Column(name="user_id")
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -50,7 +52,4 @@ public class User {
     public User() {
 
     }
-
-
-    // getters and setters
 }
