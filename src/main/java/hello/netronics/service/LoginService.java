@@ -1,6 +1,6 @@
 package hello.netronics.service;
 
-import hello.netronics.auth.SessionUser;
+
 import hello.netronics.domain.Role;
 import hello.netronics.domain.User;
 import hello.netronics.repository.UserRepository;
@@ -65,7 +65,7 @@ public class LoginService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         }
 
         // 세션서장
-        httpSession.setAttribute("user", new SessionUser(user));
+        httpSession.setAttribute("userId", user.getId());
 
         // DefaultOAuth2User 반환
         return new DefaultOAuth2User(

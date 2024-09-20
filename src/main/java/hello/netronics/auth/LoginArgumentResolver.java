@@ -33,12 +33,12 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
         // 세션에서 SessionUser 가져오기
-        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        if (sessionUser == null) {
+        Long Id= (Long)httpSession.getAttribute("userId");
+        if (Id == null) {
             throw new RuntimeException("세션에 없는 사용자");
         }
-        // SessionUser의 ID를 통해 User 엔티티 조회
-        Optional<User> userOptional = userRepository.findById(sessionUser.getId());
+        // ID를 통해 User 엔티티 조회
+        Optional<User> userOptional = userRepository.findById(Id);
         return userOptional.orElse(null);
     }
 }
