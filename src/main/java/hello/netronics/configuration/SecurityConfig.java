@@ -30,7 +30,7 @@ public class SecurityConfig {
                 // 요청에 대한 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/","index.html","/css/**", "/images/**", "/js/**", "/h2-console/**", "/login").permitAll() // 공개 경로
-                        .requestMatchers("/api/v1/**").hasRole("USER") // 특정 역할 필요 경로
+                        .requestMatchers("/api/v1/**").hasRole("USER") // 특정 역할 필요 경로 추후에 권한 별로 바꿀예정
                         .anyRequest().authenticated() // 나머지 요청은 인증 필요
                 )
                 // 로그아웃 설정
