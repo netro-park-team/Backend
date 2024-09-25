@@ -41,22 +41,26 @@ public class LikeServiceTest {
     @BeforeEach
     public void setUp() {
         sUser = new User("superUser", "su@su.com", Role.USER);
-        userRepository.save(sUser);
+
         user1 = new User("user1", "abc@abc.com", Role.USER);
+
 
         post1 = new Post();
         post1.setTitle("DummyTitle");
         post1.setContent("DummyContent");
-        post1.setUser(sUser);
+        post1.setUser(user1);
+
 
         post2 = new Post();
         post2.setTitle("DummyTitle2");
         post2.setContent("DummyContent2");
-        post2.setUser(sUser);
+        post2.setUser(user1);
+
     }
 
     @Test
     @DisplayName("좋아요 테스트")
+    @Transactional
     public void addLikeTest() {
         // given
         User user = user1;
@@ -64,28 +68,21 @@ public class LikeServiceTest {
 
         userRepository.save(user);
         postRepository.save(post);
-
         // when
         likeService.addLike(user.getId(), post.getId());
 
-        List<Like> likes = favoriteRepository.findAllByUserId(user.getId());
-
-        Like findLike = likes.get(0);
-
-        User findUser = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(IllegalArgumentException::new);
-
-        Post findPost = postRepository.findById(post.getId())
-                .orElse(new Post());
+        List<LikeResponseDto> likes = likeService.loadLikeAllByUserId(user.getId());
+        LikeResponseDto findLike = likes.get(0);
 
         // then
-        assertThat(findLike.getUser().getEmail()).isEqualTo(findUser.getEmail());
-        assertThat(findLike.getPost().getTitle()).isEqualTo(findPost.getTitle());
+        assertThat(findLike.getUsername()).isEqualTo(user.getName());
+        assertThat(findLike.getPostId()).isEqualTo(post.getId());
 
-        assertThat(findUser.getLikes().size()).isEqualTo(1);
-        assertThat(findPost.getLikes().size()).isEqualTo(1);
+        assertThat(user.getLikes().size()).isEqualTo(1);
+        assertThat(post.getLikes().size()).isEqualTo(1);
 
-        assertThat(findUser.getLikes().get(0).getUser().getEmail()).isEqualTo(findUser.getEmail());
+        assertThat(user.getLikes().get(0).getUser().getEmail()).isEqualTo(user.getEmail());
+        assertThat(post.getLikes().get(0).getUser().getEmail()).isEqualTo(user.getEmail());
     }
 
     @Test
@@ -132,7 +129,7 @@ public class LikeServiceTest {
         likeService.addLike(user.getId(), post1.getId());
         likeService.addLike(user.getId(), post2.getId());
 
-        List<LikeResponseDto> likes = likeService.loadPostAllByUserId(user.getId());
+        List<LikeResponseDto> likes = likeService.loadLikeAllByUserId(user.getId());
         // then
 
 

@@ -65,8 +65,8 @@ public class LikeService {
 
         favoriteRepository.delete(like);
     }
-    
-    public List<LikeResponseDto> loadPostAllByUserId(Long userId) {
+
+    public List<LikeResponseDto> loadLikeAllByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException());
 

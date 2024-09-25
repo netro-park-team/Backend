@@ -18,7 +18,7 @@ public class LikeController {
 
     @GetMapping("/")
     public ResponseEntity<List<LikeResponseDto>> likeList(@LoginUser User loginUser) {
-        List<LikeResponseDto> posts = likeService.loadPostAllByUserId(loginUser.getId());
+        List<LikeResponseDto> posts = likeService.loadLikeAllByUserId(loginUser.getId());
 
         return ResponseEntity.status(200).body(posts);
     }
