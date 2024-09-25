@@ -65,11 +65,7 @@ public class LikeService {
 
         favoriteRepository.delete(like);
     }
-
-    public Optional<Like> loadLikeByUserIdAndPostId(Long userId, Long postId) {
-        return favoriteRepository.findByUserIdAndPostId(userId, postId);
-    }
-
+    
     public List<LikeResponseDto> loadPostAllByUserId(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException());
@@ -83,21 +79,6 @@ public class LikeService {
         }
 
         return dtoList;
-    }
-
-    public List<User> loadAllUserByPostId(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NoSuchElementException());
-
-        List<Like> likes = post.getLikes();
-
-        List<User> users = new ArrayList<>();
-
-        for (Like like : likes) {
-            users.add(like.getUser());
-        }
-
-        return users;
     }
 
     private LikeResponseDto LikeToDto(Like like) {

@@ -102,7 +102,8 @@ public class LikeServiceTest {
         // when
         likeService.deleteLike(user.getId(), post.getId());
 
-        Optional<Like> likeOpt = likeService.loadLikeByUserIdAndPostId(user.getId(), post.getId());
+        Optional<Like> likeOpt = favoriteRepository.findByUserIdAndPostId(user.getId(), post.getId());
+
 
         User findUser = userRepository.findById(user.getId())
                 .orElse(new User());
