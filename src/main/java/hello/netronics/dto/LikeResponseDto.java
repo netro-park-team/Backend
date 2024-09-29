@@ -1,5 +1,8 @@
 package hello.netronics.dto;
 
+import lombok.Data;
+
+@Data
 public class LikeResponseDto {
     private Long likeId;
     private Long postId;
